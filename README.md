@@ -1,4 +1,4 @@
-# Vuerello(Vue + Trello)
+# Trello Vue
 
 ## 업무분담
 
