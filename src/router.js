@@ -27,6 +27,11 @@ export default new Router({
       path: "/profile",
       name: "profile",
       component: () => import("./views/Profile.vue")
+    },
+    {
+      path: "/cardlist",
+      name: "cardlist",
+      component: () => import("./views/CardList.vue")
     }
   ]
 });
