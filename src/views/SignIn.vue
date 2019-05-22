@@ -1,41 +1,62 @@
 <template>
   <div>
-    <h1>Log in to Trello</h1>
-    <div>
-      <label>내 아이디</label>
-      <input
-        type="email"
-        placeholder="ID"
-        v-model="id"
-        ref="idData"
-        @keyup.enter="nextInput()"
-        v-bind:class="{err:idData}"
-      >
+    <div id="sign-in">
+      <h1>Log in to Trello</h1>
+      <router-link to="/signup">or create an account</router-link>
+      <div>
+        <p>
+          Email
+          <span>(or username)</span>
+        </p>
+        <input
+          type="email"
+          placeholder="e.g.,calrissian@cloud.ci"
+          v-model="id"
+          ref="idData"
+          @keyup.enter="nextInput()"
+          v-bind:class="{err:idData}"
+        >
+      </div>
+      <div>
+        <p>Password</p>
+        <input
+          type="password"
+          placeholder="e.g.,***************"
+          v-model="pwd"
+          @keyup.enter="clickLogin"
+          ref="pwdData"
+          v-bind:class="{err:pwdData}"
+        >
+      </div>
+      <button @click="clickLogin" class="button">LogIn</button>
+      <button @click="fnOpen" class="button">Open</button>
     </div>
-    <div>
-      <label>비밀 번호</label>
-      <input
-        type="password"
-        placeholder="Password"
-        v-model="pwd"
-        @keyup.enter="clickLogin"
-        ref="pwdData"
-        v-bind:class="{err:pwdData}"
-      >
-    </div>
-    <button @click="clickLogin" class="button">로그인</button>
+    <!-- 카드 모달 테스트 -->
+    <card-modal :visible="card.visible" :title="card.title" @close="fnClose">
+      <div>
+        <li>데이터1</li>
+        <li>데이터2</li>
+        <li>데이터3</li>
+      </div>
+    </card-modal>
   </div>
 </template>
 <script>
+import cardModal from "@/components/CardModal.vue";
 export default {
-  name: "HelloWorld",
-  components: {},
+  components: {
+    cardModal
+  },
   data: function() {
     return {
       id: "",
       pwd: "",
       idData: false,
-      pwdData: false
+      pwdData: false,
+      card: {
+        visible: false,
+        title: "투두"
+      }
     };
   },
   watch: {
@@ -91,36 +112,89 @@ export default {
       //특수문자 / 문자 / 숫자 포함 형태의 8~15자리 이내의 암호 정규식
     },
     validateEng: function(character) {
-      const rexEng = /^[a-zA-Z0-9]{4,12}$/;
+      const rexEng = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
       return rexEng.test(character);
+    },
+    fnOpen: function() {
+      this.card.visible = true;
+    },
+    fnClose: function() {
+      this.card.visible = false;
     }
   }
 };
 </script>
-
-<style scoped lang="less">
-.button {
-  background: rgba(30, 22, 54, 0.6);
-  border-radius: 5%;
-  padding: 10px;
-  border: none;
-  color: #fff;
-  cursor: pointer;
-  &:hover {
-    background: rgba(30, 22, 54, 0.4);
-  }
+<style lang="less" scoped>
+@shadow: #b8b8b8;
+.boxshadow {
+  box-shadow: 2px 3px 5px @shadow;
 }
-.err {
-  border: 2px solid red;
+a:link {
+  color: #298fca;
+  font-size: 18px;
+  text-decoration: underline;
 }
-input {
-  height: 30px;
-  width: 200px;
-  margin-left: 20px;
-  text-indent: 8px;
+a:visited {
+  color: #298fca;
+  text-decoration: underline;
 }
-div {
-  margin: 15px;
+a:hover {
+  color: #666;
+  text-decoration: none;
+}
+h1 {
   text-align: center;
+}
+#sign-in {
+  width: 500px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  div {
+    margin: 10px 0;
+    padding: 5px 0;
+  }
+  .err {
+    border: 3px solid red;
+    .boxshadow;
+  }
+  p {
+    text-align: left;
+    font-weight: 500;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    span {
+      color: gray;
+    }
+  }
+  p.alert-pwd {
+    color: red;
+  }
+  input,
+  button {
+    width: 500px;
+    height: 40px;
+    font-size: 1.2rem;
+    padding-left: 5%;
+    box-sizing: border-box;
+    border-radius: 5px;
+    border: 1px solid @shadow;
+  }
+  button {
+    margin: 20px 0;
+    color: #fff;
+    font-size: 1.6rem;
+    font-weight: bold;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+    background-color: #61bd4f;
+    box-shadow: 0 2px 0 #3f6f21;
+  }
+  .btnActive {
+    background: #026aa7;
+    .boxshadow;
+  }
 }
 </style>
