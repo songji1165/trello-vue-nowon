@@ -7,7 +7,7 @@
             <div class="nav-header">
               <slot name="header" class="header"> </slot>
 
-              <span class="closeIcon" @click="menuHandelClick">
+              <span class="closeIcon" @click.stop="menuHandelClick">
                 <i class="fas fa-times"></i
               ></span>
             </div>

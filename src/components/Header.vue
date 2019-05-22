@@ -18,7 +18,7 @@
       <router-link to="/">
         <Btn>
             <span slot="btnIcon"><i class="fab fa-trello"></i></span>
-            <span slot="btnName">Boards</i></span>
+            <span slot="btnName">Boards</span>
           </Btn>
       </router-link>
       </div>
@@ -128,15 +128,14 @@
         this.showCreateMenu = true
       },
       openUserMenu(){
-        this.showUserMenu = true
+        this.showUserMenu = !this.showUserMenu
       },
       closeCreateMenu(){
         console.log('create')
         this.showCreateMenu = false
       },
       closeUserMenu(){
-        console.log('user')
-        this.showUserMenu = !this.showUserMenu
+        this.showUserMenu = false
       }
     }
   };
