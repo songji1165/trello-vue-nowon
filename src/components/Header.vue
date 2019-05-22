@@ -37,12 +37,25 @@
     </div>
 
     <div class="right-nav">
-      <div>
-            <Btn>
-            <span slot="btnIcon">
+      <div @click="openCreateMenu('Create')">
+          <Btn>
+            <span slot="btnIcon" >
               <i class="fas fa-plus"></i>
             </span>
-            </Btn>
+          </Btn>
+          <Menu
+          v-show="showCreateMenu"
+          @closeMenu="closeCreateMenu"
+          >
+            <p slot="header">Create</p>
+            <div slot="body" class="create-body">
+              <ul>
+                <li>
+                    <p>Create Board...</p>
+                </li>
+              </ul>
+            </div>
+          </Menu>
       </div>
       
       <div>
@@ -52,6 +65,7 @@
               </span>
           </Btn>
       </div>
+
       <div>
         <Btn>
           <span slot="btnIcon">
@@ -59,48 +73,70 @@
           </span>
         </Btn>
       </div>
-      <div @click="OpenModalUser()">
+
+      <div @click="openUserMenu('USER')">
           <Btn
-          :isBtnCircle="isBtnCircle"          
+          :isBtnCircle="isBtnCircle">
+            <span slot="btnIcon">
+                U
+            </span>
+          </Btn>
+          <Menu
+          v-show="showUserMenu"
+          @closeMenu="closeUserMenu"
           >
-              <span slot="btnIcon">
-                  U
-              </span>
-            </Btn>
-        </div>
-      
-      <div 
-      class="modalUser"
-      v-show="ModalUser">
-        <ul>
-          <li><router-link to="/profile">Profile</router-link></li>
-          <li><router-link to="/cardlist">Cards</router-link></li>
-          <li>Settings</li>
-          <li><router-link to="/signin">LogOut</router-link></li>
-        </ul>
+            <p slot="header">Create</p>
+            <div slot="body" class="create-body">
+              <ul>
+                <li>
+                    <p>Profile</p>
+                </li>
+                <li>
+                    <p>Cards</p>
+                </li>
+                <li>
+                    <p>Settings</p>
+                </li>
+              </ul>
+            </div>
+          </Menu>
       </div>
+
       <!-- <router-link to="/signin">signin</router-link>
       <router-link to="/signup">signup</router-link>
       <router-link to="/profile">profile</router-link> -->
     </div>
+    
   </div>
 </template>
 
 <script>
   import Btn from '@/components/Button.vue';
+  import Menu from '@/components/Menu.vue';
 
   export default {
-    components :{Btn},
+    components :{Btn, Menu},
     data() {
       return {
-        ModalUser:false,
-        isBtnCircle:true
-
+        isBtnCircle:true,
+        showCreateMenu:false,
+        showUserMenu:false
       }
     },
     methods:{
-      OpenModalUser(){
-        this.ModalUser = !this.ModalUser
+      openCreateMenu(){
+        this.showCreateMenu = true
+      },
+      openUserMenu(){
+        this.showUserMenu = true
+      },
+      closeCreateMenu(){
+        console.log('create')
+        this.showCreateMenu = false
+      },
+      closeUserMenu(){
+        console.log('user')
+        this.showUserMenu = !this.showUserMenu
       }
     }
   };
@@ -115,7 +151,6 @@
 
     a {
       line-height: 40px;
-      /* margin: 0 5px; */
       box-sizing: border-box;
       color: #fff;
       font-weight: bold;
@@ -126,6 +161,8 @@
       }
     }
 
+   
+
     h1 {
       position: absolute;
       left: 50%;
@@ -135,11 +172,15 @@
       margin: 0;
       font-size: 30px;
       font-style:oblique;
+      opacity: .5;
 
       i{
         font-size:.9em !important;
         line-height: 40px;
       }
+      &:hover {
+        opacity: .8;
+    }
     }
    
   #header {
@@ -199,15 +240,29 @@
       display: block;
       clear: both;
     }
-
-    .modalUser{
-        border: 1px solid red;
-        position:absolute;
-        right:10px;
-        top:42px;
-        width:304px;
-      }
-
     }
   }
+
+.create-body{
+  width: 100%;
+  ul{
+      list-style: none;
+      width: 100%;
+      padding: 0;
+      li{
+        width:100%;
+        color: #172b4d;
+        font-weight:bold;
+        padding: 6px 0;
+        p{
+          padding:0 16px;
+        }
+        &:hover{
+          background: #026aa7;
+          color:#fff;
+          cursor: pointer;
+        }
+      }
+    }
+}
 </style>

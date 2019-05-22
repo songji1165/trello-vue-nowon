@@ -28,6 +28,7 @@
     line-height: 45px;
     margin: 3px 2px;
     text-align: center;
+
     .btn-wrapper {
       vertical-align: middle;
       color: #fff;
@@ -36,21 +37,26 @@
       line-height: 32px;
       padding:0 6px;
       background: rgba(255, 255, 255, 0.3);
+
       div {
         float: left;
       }
+
       .btn-icon {
         width: 20px;
-        text-align: center !important;
+        /* margin-right: 5px */
       }
-      .btn-name {
+
+      .btn-name{
       }
+
     &:hover {
       cursor: pointer;
       background: rgba(255, 255, 255, 0.1)
     }
     }
   }
+
   .btnCircle {
     border-radius: 50% !important;
   }
