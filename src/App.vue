@@ -9,8 +9,16 @@
 
 <script>
 import VHeader from "./components/Header.vue";
+import axios from "axios"
+
 export default {
-  components: { VHeader }
+  components: { VHeader },
+  mounted() {
+    axios.post('/auth/register',{
+      email : "test123245@test.com",
+      password : "123245"
+    }).then(res=>console.log(res))
+  },
 };
 </script>
 
