@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <v-header></v-header>
+      <v-header id="header"></v-header>
     <div id="body">
       <router-view/>
     </div>
@@ -13,16 +13,17 @@ import axios from "axios"
 
 export default {
   components: { VHeader },
-  mounted() {
-    axios.post('/auth/register',{
-      email : "test123245@test.com",
-      password : "123245"
-    }).then(res=>console.log(res))
-  },
+  // mounted() {
+  //   axios.post('/auth/register',{
+  //     email : "test123245@test.com",
+  //     password : "123245"
+  //   }).then(res=>console.log(res))
+  // },
 };
 </script>
 
 <style lang="less" scoped>
+#header{z-index: 10}
 #body {
   padding: 24px;
 }

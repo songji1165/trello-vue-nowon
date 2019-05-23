@@ -3,22 +3,23 @@
     <div class="nav-mask">
       <div class="nav-wrapper">
         <div class="nav-container">
-          <div class="header-wrapper">
-            <div class="nav-header">
-              <slot name="header" class="header"> </slot>
-
-              <span class="closeIcon" @click.stop="menuHandelClick">
-                <i class="fas fa-times"></i
-              ></span>
-            </div>
+          <div class="nav-header">
+            {{ navHeader }}
+            <span class="closeIcon" @click.stop="clickCloseIcon">
+              <i class="fas fa-times"></i
+            ></span>
           </div>
-
+          <hr/>
           <div class="nav-body">
-            <slot name="body" class="slot-body"> </slot>
+            <ul>
+              <li v-for="text in navBody">
+                <p>{{ text }}</p>
+              </li>
+            </ul>
           </div>
-
-          <div class="nav-footer">
-            <slot name="footer"> </slot>
+          <hr v-show="!!navFooter" />
+          <div class="nav-footer" v-show="!!navFooter">
+            <p @click.stop="clickNavFooter">{{ navFooter }}</p>
           </div>
         </div>
       </div>
@@ -28,14 +29,19 @@
 
 <script>
   export default {
-    // props:["headerTitle"],
+    props: ["navHeader", "navBody", "navFooter"],
     data() {
       return {};
     },
     methods: {
-      menuHandelClick() {
-        console.log("clink");
+      clickCloseIcon() {
         this.$emit("closeMenu");
+      },
+      clickNavFooter(){
+        if(this.navFooter == 'Logout'){
+          this.$router.push('signIn')
+          this.$emit('closeMenu')
+        }
       }
     }
   };
@@ -46,18 +52,8 @@
     margin: 0;
   }
   #nav {
-    /* position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-      height: 100%; */
 
     .nav-mask {
-      /* width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      position: relative; */
-
       .nav-wrapper {
         width: 305px;
         background: #fff;
@@ -70,30 +66,70 @@
           0 0 0 1px rgba(9, 30, 66, 0.08);
 
         .nav-container {
-          .header-wrapper {
-            padding: 0 15px;
+          hr {
+            background-color: rgba(9, 30, 66, 0.13);
+            border: 0;
+            height: 1px;
+            margin: 0 16px;
+          }
+          .nav-header {
+            margin: 0 15px;
             color: #6b778c;
-            .nav-header {
-              position: relative;
+            position: relative;
+            line-height: 40px;
+            height: 40px;
+            margin-top: 0;
+            text-align: center;
+            .closeIcon {
+              position: absolute;
+              right: 0;
+              top: 0;
               line-height: 40px;
-              height: 40px;
-              margin-top: 0;
-              margin-bottom: 8px;
-              border-bottom: 1px solid rgba(9, 30, 66, 0.13);
-              text-align: center;
-              .closeIcon {
-                position: absolute;
-                right: 0;
-                top: 0;
-                line-height: 40px;
-                padding: 0 10px;
-                cursor: pointer;
-              }
+              padding: 0 10px;
+              cursor: pointer;
             }
           }
 
           .nav-body {
             text-align: left;
+            width: 100%;
+            margin: 6px 0 12px;
+            ul {
+              list-style: none;
+              width: 100%;
+              padding: 0;
+              li {
+                width: 100%;
+                color: #172b4d;
+                font-weight: bold;
+                padding: 6px 0;
+                p {
+                  padding: 0 16px;
+                }
+                &:hover {
+                  background: #026aa7;
+                  color: #fff;
+                  cursor: pointer;
+                }
+              }
+            }
+          }
+
+          .nav-footer {
+            width: 100%;
+            color: #172b4d;
+            font-weight: bold;
+            padding: 6px 0;
+            margin: 6px 0 12px;
+            p {
+              height: 100%;
+              padding: 0 16px;
+            }
+            &:hover {
+              background: #026aa7;
+              color: #fff;
+              cursor: pointer;
+            }
           }
         }
       }

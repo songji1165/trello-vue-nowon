@@ -149,10 +149,11 @@ export default {
       this.selectedBackground = this.makeStyle(item);
     },
     createBoard() {
-      this.boardList.push({
+     this.boardList.push({
         title: this.boardTitle,
         background: this.selectedBackground
       });
+      this.$router.push('/cardList')
     },
     makeStyle(item) {
       if (item.type == "image") {

@@ -2,9 +2,11 @@
   <div id="btn">
     <div class="btn-wrapper" :class="{btnCircle:btnCircle}">
       <div class="btn-icon">
+        <i class="material-icons" v-show="!!btnIcon">{{ btnIcon }}</i>
         <slot name="btnIcon"></slot>
       </div>
       <div class="btn-name">
+        {{ btnName }}
         <slot name="btnName"></slot>
       </div>
     </div>
@@ -13,7 +15,7 @@
 
 <script>
   export default {
-    props: ["isBtnCircle"],
+    props: ["isBtnCircle", "btnIcon"],
     data() {
       return {
         btnCircle: this.isBtnCircle
@@ -35,7 +37,7 @@
       border-radius: 5px;
       height: 32px;
       line-height: 32px;
-      padding:0 6px;
+      padding: 0 6px;
       background: rgba(255, 255, 255, 0.3);
 
       div {
@@ -44,16 +46,19 @@
 
       .btn-icon {
         width: 20px;
-        /* margin-right: 5px */
+        i {
+          font-size: 20px;
+          line-height: 32px;
+        }
       }
 
-      .btn-name{
+      .btn-name {
       }
 
-    &:hover {
-      cursor: pointer;
-      background: rgba(255, 255, 255, 0.1)
-    }
+      &:hover {
+        cursor: pointer;
+        background: rgba(255, 255, 255, 0.1);
+      }
     }
   }
 

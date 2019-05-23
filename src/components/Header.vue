@@ -7,10 +7,8 @@
     <div class="left-nav">
       <div>
         <router-link to="/">
-          <Btn>
-          <span slot="btnIcon">
-            <i class="fas fa-home"></i>
-          </span>
+          <Btn
+          :btnIcon="btnIcon('home')">
           </Btn>
         </router-link>
       </div>
@@ -24,7 +22,8 @@
       </div>
       <div>
         <router-link to="/">
-          <Btn>
+          <Btn
+          >
           <span slot="btnName">
             <div class="search"> 
               <input type="text">
@@ -38,67 +37,43 @@
 
     <div class="right-nav">
       <div @click="openCreateMenu('Create')">
-          <Btn>
-            <span slot="btnIcon" >
-              <i class="fas fa-plus"></i>
-            </span>
+          <Btn
+          :btnIcon="btnIcon('add')">
           </Btn>
           <Menu
           v-show="showCreateMenu"
           @closeMenu="closeCreateMenu"
+          :nav-header="navHeader('Create')"
+          :nav-body="createBody"
           >
-            <p slot="header">Create</p>
-            <div slot="body" class="create-body">
-              <ul>
-                <li>
-                    <p>Create Board...</p>
-                </li>
-              </ul>
-            </div>
           </Menu>
       </div>
       
       <div>
-          <Btn>
-              <span slot="btnIcon">
-                  <i class="far fa-question-circle"></i>
-              </span>
+          <Btn
+          :btnIcon="btnIcon('error_outline')">
           </Btn>
       </div>
 
       <div>
-        <Btn>
-          <span slot="btnIcon">
-              <i class="far fa-bell"></i>
-          </span>
+        <Btn
+        :btnIcon="btnIcon('notifications_none')">
         </Btn>
       </div>
 
       <div @click="openUserMenu('USER')">
           <Btn
-          :isBtnCircle="isBtnCircle">
-            <span slot="btnIcon">
-                U
-            </span>
+          :isBtnCircle="isBtnCircle"
+          :btnIcon="btnIcon('person_outline')">
           </Btn>
           <Menu
           v-show="showUserMenu"
           @closeMenu="closeUserMenu"
+          :nav-header="navHeader('USER')"
+          :nav-body="userBody"
+          :nav-footer="navFooter('Logout')"
           >
-            <p slot="header">Create</p>
-            <div slot="body" class="create-body">
-              <ul>
-                <li>
-                    <p>Profile</p>
-                </li>
-                <li>
-                    <p>Cards</p>
-                </li>
-                <li>
-                    <p>Settings</p>
-                </li>
-              </ul>
-            </div>
+            <!-- <p slot="header">Create</p> -->
           </Menu>
       </div>
 
@@ -120,24 +95,36 @@
       return {
         isBtnCircle:true,
         showCreateMenu:false,
-        showUserMenu:false
-      }
-    },
+        showUserMenu:false,
+        createBody:['Create Boards...'],
+        userBody:['Profile','Cards','Settings']
+    }},
     methods:{
       openCreateMenu(){
         this.showCreateMenu = true
+        this.showUserMenu = false
       },
       openUserMenu(){
-        this.showUserMenu = !this.showUserMenu
+        this.showUserMenu = true
+        this.showCreateMenu = false
       },
       closeCreateMenu(){
-        console.log('create')
         this.showCreateMenu = false
       },
       closeUserMenu(){
         this.showUserMenu = false
-      }
-    }
+      },
+      btnIcon(icon){
+        return icon
+      },
+      navHeader(title){
+        return title  
+      },
+      navFooter(title){
+        return title  
+      },
+
+    },
   };
 </script>
 
@@ -242,26 +229,5 @@
     }
   }
 
-.create-body{
-  width: 100%;
-  ul{
-      list-style: none;
-      width: 100%;
-      padding: 0;
-      li{
-        width:100%;
-        color: #172b4d;
-        font-weight:bold;
-        padding: 6px 0;
-        p{
-          padding:0 16px;
-        }
-        &:hover{
-          background: #026aa7;
-          color:#fff;
-          cursor: pointer;
-        }
-      }
-    }
-}
+
 </style>
