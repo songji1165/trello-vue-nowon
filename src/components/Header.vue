@@ -14,9 +14,9 @@
       </div>
       <div>
       <router-link to="/">
-        <Btn>
+        <Btn :btnName="btnName('Boards')">
             <span slot="btnIcon"><i class="fab fa-trello"></i></span>
-            <span slot="btnName">Boards</span>
+            <!-- <span slot="btnTitle">Boards</span> -->
           </Btn>
       </router-link>
       </div>
@@ -24,7 +24,7 @@
         <router-link to="/">
           <Btn
           >
-          <span slot="btnName">
+          <span slot="btnTitle">
             <div class="search"> 
               <input type="text">
               <button><i class="fas fa-search"></i></button>
@@ -87,7 +87,7 @@
 
 <script>
   import Btn from '@/components/Button.vue';
-  import Menu from '@/components/Menu.vue';
+  import Menu from '@/components/Hmenu.vue';
 
   export default {
     components :{Btn, Menu},
@@ -116,6 +116,9 @@
       },
       btnIcon(icon){
         return icon
+      },
+      btnName(title){
+        return title
       },
       navHeader(title){
         return title  
@@ -182,7 +185,7 @@
       clear: both;
     }
     i{
-      font-size: 16px;
+      font-size: 20px;
     }
     .left-nav {
       float: left;
@@ -193,7 +196,7 @@
       content: "";
       display: block;
       clear: both;
-    }
+      }
       .search{
         position: relative;
         width: 150px;
@@ -207,7 +210,7 @@
         button{
           line-height: 32px;
           position: absolute;
-          right: -25px;
+          right: 0;
           background: none;
           border: none;
           color: #fff

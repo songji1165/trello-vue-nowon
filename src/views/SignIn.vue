@@ -43,6 +43,8 @@
 </template>
 <script>
 import cardModal from "@/components/CardModal.vue";
+import axios from "axios"
+
 export default {
   components: {
     cardModal
@@ -97,11 +99,12 @@ export default {
         alert("비밀번호 형식이 옳지않습니다.");
         return;
       }
-      alert(this.id + "," + this.pwd);
+      // alert(this.id + "," + this.pwd);
       const param = {
-        id: this.id,
-        pwd: this.pwd
+        email: this.id,
+        password: this.pwd
       };
+      axios.post(`/auth/login`,param).then(res=>this.$router.push('/'))
     },
     nextInput: function() {
       this.$refs.pwdData.focus();

@@ -26,13 +26,13 @@
       <p>Password</p>
       <input
         type="password"
-        placeholder="6~12"
+        placeholder="8~15"
         v-model="pwd"
         @change="enterPwd"
         :class="{err:errPwd}"
       />
       <p v-show="alertPwd" class="alert-pwd">
-        비밀번호는 6~12자리로 설정해주세요.
+        비밀번호는 특수문자,문자,숫자 포함 형태의 8~15자리 이내로 설정해주세요
       </p>
     </div>
     <div>
@@ -48,6 +48,8 @@
 </template>
 
 <script>
+  import axios from "axios"
+
   export default {
     data() {
       return {
@@ -83,7 +85,8 @@
         }
       },
       enterPwd() {
-        const rePwd = /^[A-Za-z0-9]{6,12}$/;
+        const rePwd = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
+        //특수문자 / 문자 / 숫자 포함 형태의 8~15자리 이내의 암호 정규식
         if (rePwd.test(this.pwd) && this.pwd != null) {
           this.alertPwd = false;
           this.errPwd = false;
@@ -97,7 +100,11 @@
       },
       handleClickSingIn() {
         if (this.enterName() && this.enterEmail() && this.enterPwd()) {
-          console.log("가입 성공");
+          axios.post(`/auth/register`,{
+            name: this.name,
+            email:this.email,
+            password:this.pwd
+          }).then(res=>this.$router.push('/'))
         } else {
           console.log("실패");
         }
