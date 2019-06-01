@@ -275,13 +275,13 @@
           }
         }
         }
-        li.hoverNone:hover{
-            cursor:unset;
-            background:none
-        }
         }
 
       }
+        li.hoverNone:hover{
+            cursor: default !important;
+            background:none
+        }
     }
   }
 

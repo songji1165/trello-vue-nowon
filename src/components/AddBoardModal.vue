@@ -1,91 +1,63 @@
 <template>
-  <div class="home">
-    <div class="home-card-container">
-      <div class="home-card-title">
-        <i class="fa fa-user home-card-title-icon"></i>
-        Boards
-      </div>
-      <div
-        class="home-card"
-        v-for="(board, index) in boardList"
-        :key="index"
-        :style="boardBackground(board)"
-        @click="linkToCard(index)"
-      >
-        {{ board.title }}
-      </div>
-      <div class="home-card addNew" @click="addNewOpen">
-        <span>Create new board...</span>
-      </div>
-    </div>
-    <add-board
-      v-show="addNew"
-      @addBoard="addBoard"
-      @addModalClose="addModalClose"
-    >
-    </add-board>
-    <!-- <div class="addNewModal-container" v-show="addNew">
-      <div class="addNewModal">
-        <div class="form-container">
-          <div
-            class="board-title"
-            :style="selectedBackground"
-            :class="{backgroundImage:selectedImage}"
-          >
-            <button type="button" class="closeButton" @click="addNewClose">
-              <i class="fa fa-times"></i>
-            </button>
-            <div>
-              <input
-                v-model="boardTitle"
-                placeholder="Add board title"
-                class="title-input"
-                @keyup.enter="createBoard"
-              />
-            </div>
-          </div>
-          <ul class="background-grid">
-            <li
-              class="background-grid-item"
-              v-for="(item, index) in backgroundList"
-              :key="index"
-            >
-              <button
-                class="background-grid-trigger"
-                :style="makeStyle(item)"
-                @click="backgroundSelect(item, index)"
-              >
-                <i v-show="item.check" class="fa fa-check"></i>
-                <i v-show="index == 8" class="fa fa-ellipsis-h"></i>
-              </button>
-            </li>
-          </ul>
-        </div>
-        <button
-          class="create-button"
-          @click="createBoard"
-          :disabled="!boardTitle"
-          :class="{disabled:!boardTitle}"
+  <!-- <div> -->
+  <div class="addNewModal-container">
+    <div class="addNewModal">
+      <div class="form-container">
+        <div
+          class="board-title"
+          :style="selectedBackground"
+          :class="{backgroundImage:selectedImage}"
         >
-          Create Board
-        </button>
+          <button type="button" class="closeButton" @click="addNewClose">
+            <i class="fa fa-times"></i>
+          </button>
+          <div>
+            <input
+              v-model="boardTitle"
+              placeholder="Add board title"
+              class="title-input"
+              @keyup.enter="createBoard"
+            />
+          </div>
+        </div>
+        <ul class="background-grid">
+          <li
+            class="background-grid-item"
+            v-for="(item, index) in backgroundList"
+            :key="index"
+          >
+            <button
+              class="background-grid-trigger"
+              :style="makeStyle(item)"
+              @click="backgroundSelect(item, index)"
+            >
+              <i v-show="item.check" class="fa fa-check"></i>
+              <i v-show="index == 8" class="fa fa-ellipsis-h"></i>
+            </button>
+          </li>
+        </ul>
       </div>
-      <div class="blind" @click="addNewClose"></div>
-    </div> -->
+      <button
+        class="create-button"
+        @click="createBoard"
+        :disabled="!boardTitle"
+        :class="{disabled:!boardTitle}"
+      >
+        Create Board
+      </button>
+    </div>
+    <div class="blind" @click="addNewClose"></div>
   </div>
+  <!-- </div> -->
 </template>
 
 <script>
-  import addBoard from "@/components/AddBoardModal.vue";
-  import axios from "axios";
+  //   import { mapActions } from "vuex";
 
   export default {
-    name: "home",
-    components: { addBoard },
-    data: function() {
+    data() {
       return {
-        addNew: false,
-        boardTitle: "",
+        activeCheckIndex: 0,
         backgroundList: [
           {
             check: false,
@@ -96,6 +68,11 @@
             check: false,
             type: "color",
             background: "rgb(255, 153, 204)"
+          },
+          {
+            check: false,
+            type: "color",
+            background: "rgb(204, 153, 255)"
           },
           {
             check: false,
@@ -111,58 +88,31 @@
             check: false,
             type: "color",
             background: "rgb(176, 70, 50)"
-          },
-          {
-            check: false
           }
         ],
-        // boardList: [],
-        activeCheckIndex: 0,
         selectedImage: true,
-        selectedBackground: {}
+        boardTitle: ""
       };
     },
-    computed: {
-      TOKEN() {
-        return sessionStorage.getItem("TOKEN");
-      },
-      boardList() {
-        console.log(this.$store.state.boardList);
-        return this.$store.state.boardList;
-      }
-    },
-    beforeMount: function() {
-      this.selectedBackground = this.makeStyle(
-        this.backgroundList[this.activeCheckIndex]
-      );
-    },
-    mounted() {
-      console.log(this.TOKEN);
-      axios
-        .get("/board", {
-          headers: {
-            Authorization: `$${this.TOKEN}`
-          }
-        })
-        .then(res => {
-          console.log(res);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    },
     methods: {
-      addNewOpen() {
-        this.addNew = true;
+      addNewClose() {
+        this.$emit("addModalClose");
       },
-      addBoard() {
-        this.addNew = false;
+      createBoard() {
+
+        this.$store.commit("BOARD", {
+          title: this.boardTitle,
+          background: this.selectedBackground.backgroundColor
+        });
+        this.$emit("addBoard");
+        //    this.$store.state.todolist
       },
-      addModalClose() {
-        this.addNew = false;
-      },
-      boardBackground(board) {
-        return { background: board.background["background"] };
+      makeStyle(item) {
+        if (item.type == "image") {
+          return { backgroundImage: `url(${item.background})` };
+        } else {
+          return { backgroundColor: item.background };
+        }
       },
       backgroundSelect(item, idx) {
         if (idx == 8) return;
@@ -174,90 +124,17 @@
         item.check = true;
 
         this.selectedBackground = this.makeStyle(item);
-      },
-      createBoard() {
-        // this.$store.commit(ADD_BOARD, {
-        //   title: this.boardTitle,
-        //   background: this.selectedBackground
-        // });
-        // this.boardList.push({
-        //   title: this.boardTitle,
-        //   background: this.selectedBackground
-        // });
-        this.addNew = false;
-      },
-      makeStyle(item) {
-        return { backgroundColor: item.background };
-      },
-      linkToCard(index) {
-        console.log(index);
-        this.$router.push({
-          path: "/cardlist",
-          query: { boardList: `${index}` }
-        });
       }
+    },
+    beforeMount: function() {
+      this.selectedBackground = this.makeStyle(
+        this.backgroundList[this.activeCheckIndex]
+      );
     }
   };
 </script>
 
 <style>
-  .home {
-    margin-top: 50px;
-    display: flex;
-    justify-content: center;
-  }
-
-  .home-card-container {
-    display: flex;
-    flex-wrap: wrap;
-    width: 672px;
-  }
-
-  .home-card-title {
-    font-weight: bold;
-    width: 100%;
-    padding: 15px;
-    font-size: 16px;
-    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans,
-      Ubuntu, Droid Sans, Helvetica Neue, sans-serif;
-  }
-
-  .home-card-title-icon {
-    margin-right: 12px;
-  }
-
-  .home-card {
-    border-radius: 3px;
-    display: flex;
-    margin: 0px 4px 16px 4px;
-    padding: 8px;
-    width: 200px;
-    height: 96px;
-    vertical-align: middle;
-    border: 1px solid black;
-    cursor: pointer;
-    font-weight: bold;
-
-    border: none;
-  }
-
-  .home-card:not(.addNew) {
-    background-size: cover;
-    background-position: 50%;
-    color: #fff;
-    line-height: 20px;
-    position: relative;
-    text-decoration: none;
-  }
-
-  .home-card.addNew {
-    justify-content: center;
-    align-items: center;
-    color: #6b778c;
-
-    background-color: rgba(9, 30, 66, 0.08);
-  }
-
   .blind {
     align-items: flex-start;
     background-color: rgba(0, 0, 0, 0.75);

@@ -48,7 +48,7 @@
 </template>
 
 <script>
-  import axios from "axios"
+  import axios from "axios";
 
   export default {
     data() {
@@ -90,8 +90,8 @@
         if (rePwd.test(this.pwd) && this.pwd != null) {
           this.alertPwd = false;
           this.errPwd = false;
-          
-          return true
+
+          return true;
         } else {
           this.errPwd = true;
           this.alertPwd = true;
@@ -100,11 +100,13 @@
       },
       handleClickSingIn() {
         if (this.enterName() && this.enterEmail() && this.enterPwd()) {
-          axios.post(`/auth/register`,{
-            name: this.name,
-            email:this.email,
-            password:this.pwd
-          }).then(res=>this.$router.push('/'))
+          axios
+            .post(`/auth/register`, {
+              name: this.name,
+              email: this.email,
+              password: this.pwd
+            })
+            .then(res => this.$router.push("/signin"));
         } else {
           console.log("실패");
         }
@@ -148,7 +150,7 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
 
     div {
       margin: 10px 0;

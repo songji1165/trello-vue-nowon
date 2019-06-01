@@ -9,11 +9,11 @@
               <i class="fas fa-times"></i
             ></span>
           </div>
-          <hr/>
+          <hr />
           <div class="nav-body">
             <ul>
               <li v-for="text in navBody">
-                <p>{{ text }}</p>
+                <p @click.stop="clickNavBody">{{ text }}</p>
               </li>
             </ul>
           </div>
@@ -37,10 +37,24 @@
       clickCloseIcon() {
         this.$emit("closeMenu");
       },
-      clickNavFooter(){
-        if(this.navFooter == 'Logout'){
-          this.$router.push('signIn')
-          this.$emit('closeMenu')
+      clickNavBody() {
+        if (event.target.innerHTML == "Profile") {
+          this.$router.push("profile");
+          this.$emit("closeMenu");
+        } else if (event.target.innerHTML == "Cards") {
+          // this.$store.dispatch('ADD_BOARD')
+          // this.$router.push("cardlist");
+          // this.$emit("closeMenu");
+        } else if (event.target.innerHTML == "Settings") {
+          this.$router.push("profile");
+          this.$emit("closeMenu");
+        }
+      },
+      clickNavFooter() {
+        if (this.navFooter == "Logout") {
+          this.$router.push("signIn");
+          sessionStorage.removeItem("TOKEN");
+          this.$emit("closeMenu");
         }
       }
     }
@@ -52,7 +66,6 @@
     margin: 0;
   }
   #nav {
-
     .nav-mask {
       .nav-wrapper {
         width: 305px;
